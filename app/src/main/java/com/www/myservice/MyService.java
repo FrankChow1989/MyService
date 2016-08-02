@@ -23,6 +23,8 @@ public class MyService extends AccessibilityService
 
     SharedPreferences sp;
 
+    boolean isFresh = false;
+
     @Override
     public void onCreate()
     {
@@ -54,11 +56,21 @@ public class MyService extends AccessibilityService
             return;
         }
 
-        //System.out.println("------------rootNodeInfo-------------" + rootNodeInfo);
-
-        if (rootNodeInfo.getText() != null)
+        if (rootNodeInfo != null && rootNodeInfo.getPackageName().equals("com.tencent.mm"))
         {
-            if (rootNodeInfo.getClassName().equals("android.widget.TextView") && !rootNodeInfo.isLongClickable() && rootNodeInfo.getText().toString().contains("提示"))
+            if (rootNodeInfo.getClassName().equals("android.widget.FrameLayout") && rootNodeInfo.isClickable() && isFresh == false)
+            {
+                System.out.println("------------rootNodeInfo-------------" + rootNodeInfo);
+
+
+                rootNodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                //isFresh = true;
+            }
+        }
+
+        if (rootNodeInfo.getText() != null && rootNodeInfo.getPackageName().equals("com.tencent.mm"))
+        {
+            if (rootNodeInfo.getClassName().equals("android.widget.TextView") && !rootNodeInfo.isLongClickable() && rootNodeInfo.getText().toString().trim().equals("提示"))
             {
                 System.out.println("---------------Success!-------rootNodeInfo----------" + rootNodeInfo);
 
@@ -68,6 +80,9 @@ public class MyService extends AccessibilityService
                     System.out.println("--------url-----success-----" + url_get);
                 }
                 SendMessages();
+                SendTxtMsg("18506461805", url_get);
+                //SendTxtMsg("13681849965", url_get);
+
             } else if (rootNodeInfo.getClassName().equals("android.widget.TextView") && !rootNodeInfo.isLongClickable())
             {
                 System.out.println("-----------normal----------rootNodeInfo---------" + rootNodeInfo);
@@ -90,12 +105,8 @@ public class MyService extends AccessibilityService
 
     private void SendMessages()
     {
-
         id = sp.getString(url_get.trim(), "");
-
         System.out.println("--------------id----------------:" + id);
-
-
         String url = "http://bbb.18qhx.com/domain/stop";
         String url_real = url + "?id=" + id;
 
@@ -106,7 +117,7 @@ public class MyService extends AccessibilityService
             public void onResponse(String s)
             {
                 //请求成功回调
-
+                System.out.println("-----------success----------");
 
             }
         }, new Response.ErrorListener()
@@ -119,6 +130,34 @@ public class MyService extends AccessibilityService
         });
 
         mStringRequest.setTag("abc_get");
+        App.getHttpQueues().add(mStringRequest);
+    }
+
+    private void SendTxtMsg(String phone, String unopen_url)
+    {
+
+        String url_real = "http://bd.shuangla.cc/tongzhi/index?phone=" + phone + "&cid=" + unopen_url;
+
+        //-----------------------StringRequest-----------------------
+        StringRequest mStringRequest = new StringRequest(Request.Method.GET, url_real, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                //请求成功回调
+                System.out.println("-----------success----------");
+
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                //请求失败回调
+            }
+        });
+
+        mStringRequest.setTag("aaa_get");
         App.getHttpQueues().add(mStringRequest);
     }
 

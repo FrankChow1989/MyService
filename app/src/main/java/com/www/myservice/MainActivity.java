@@ -61,10 +61,10 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 CmdHelper.sendTap(0x57, 0x96);
-                handler.postDelayed(runnable, 13000);
+                handler.postDelayed(runnable, 23000);
             }
         };
-        handler.postDelayed(runnable, 13000);
+        handler.postDelayed(runnable, 23000);
 
 
         handler1 = new Handler();
@@ -74,10 +74,10 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 GetUrl();
-                handler1.postDelayed(runnable1, 30 * 1000);
+                handler1.postDelayed(runnable1, 60 * 1000);
             }
         };
-        handler1.postDelayed(runnable1, 30 * 1000);
+        handler1.postDelayed(runnable1, 60 * 1000);
     }
 
     private void GetUrl()
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(mAccessibleIntent);
                 break;
             case R.id.id_start_check:
-                GetUrl();
+                //GetUrl();
                 //weChatController.openWebView();
                 //weChatController.openWebView("http://m.gqjcm.com/go.html?rnd=1469509861#s%@mp.weixin.qq.com/oks/@mp.weixin.qq.com/oks%40mp.weixin.qq.com/oks&#http://mp.weixin.qq.com/oks");
                 break;
