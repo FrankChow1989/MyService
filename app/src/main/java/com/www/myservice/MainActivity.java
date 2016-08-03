@@ -14,11 +14,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -97,7 +95,7 @@ public class MainActivity extends AppCompatActivity
 
                     System.out.println("sssssssssss" + s);
 
-                    weChatController.openWebView(js.getString("name"));
+                    weChatController.openWebView(js.getString("name") + "/show.html");
                 } catch (JSONException e)
                 {
                     e.printStackTrace();
@@ -126,7 +124,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(mAccessibleIntent);
                 break;
             case R.id.id_start_check:
-                //GetUrl();
+                GetUrl();
                 //weChatController.openWebView();
                 //weChatController.openWebView("http://m.gqjcm.com/go.html?rnd=1469509861#s%@mp.weixin.qq.com/oks/@mp.weixin.qq.com/oks%40mp.weixin.qq.com/oks&#http://mp.weixin.qq.com/oks");
                 break;
