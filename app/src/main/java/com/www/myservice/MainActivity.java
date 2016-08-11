@@ -59,10 +59,10 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 CmdHelper.sendTap(0x57, 0x96);
-                handler.postDelayed(runnable, 23000);
+                handler.postDelayed(runnable, 13000);
             }
         };
-        handler.postDelayed(runnable, 23000);
+        handler.postDelayed(runnable, 13000);
 
 
         handler1 = new Handler();
@@ -91,11 +91,11 @@ public class MainActivity extends AppCompatActivity
                 {
                     JSONObject js = new JSONObject(s);
                     editor.putString(js.getString("name"), js.getString("id"));
+                    editor.putString("url", js.getString("name"));
                     editor.commit();
 
-                    System.out.println("sssssssssss" + s);
-
                     weChatController.openWebView(js.getString("name") + "/show.html");
+                    weChatController.openWebView(js.getString("name") + "/show2.html");
                 } catch (JSONException e)
                 {
                     e.printStackTrace();

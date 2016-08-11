@@ -29,7 +29,6 @@ public class MyService extends AccessibilityService
     public void onCreate()
     {
         //初始化
-        sp = getSharedPreferences("URL", MODE_PRIVATE);
         super.onCreate();
     }
 
@@ -49,6 +48,8 @@ public class MyService extends AccessibilityService
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent)
     {
+        sp = getSharedPreferences("URL", MODE_PRIVATE);
+        // System.out.println("--------url-----success-----" + sp.getString("url",""));
         //GetUrl();
         this.rootNodeInfo = accessibilityEvent.getSource();
         if (rootNodeInfo == null)
@@ -62,7 +63,6 @@ public class MyService extends AccessibilityService
             {
                 System.out.println("------------rootNodeInfo-------------" + rootNodeInfo);
 
-
                 rootNodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 //isFresh = true;
             }
@@ -74,21 +74,23 @@ public class MyService extends AccessibilityService
             {
                 System.out.println("---------------Success!-------rootNodeInfo----------" + rootNodeInfo);
 
-                if (rootNodeInfo.getText().toString().contains("网页由"))
+                if (rootNodeInfo.getText().toString().contains("网页由 " + sp.getString("url", "")))
                 {
-                    url_get = rootNodeInfo.getText().toString().replace("网页由", "").replace("提供", "");
+                    url_get = sp.getString("url", "");
                     System.out.println("--------url-----success-----" + url_get);
                 }
+
                 SendMessages();
                 SendTxtMsg("18506461805", url_get);
-                //SendTxtMsg("13681849965", url_get);
+                SendTxtMsg("13681849965", url_get);
+                SendTxtMsg("18512177770", url_get);
 
             } else if (rootNodeInfo.getClassName().equals("android.widget.TextView") && !rootNodeInfo.isLongClickable())
             {
                 System.out.println("-----------normal----------rootNodeInfo---------" + rootNodeInfo);
-                if (rootNodeInfo.getText().toString().contains("网页由"))
+                if (rootNodeInfo.getText().toString().contains("网页由 " + sp.getString("url", "")))
                 {
-                    url_get = rootNodeInfo.getText().toString().replace("网页由", "").replace("提供", "");
+                    url_get = sp.getString("url", "");
                     System.out.println("--------url-----normal-----" + url_get);
                     id = sp.getString(url_get.trim(), "");
                     System.out.println("--------------id----------------:" + id);
@@ -100,7 +102,6 @@ public class MyService extends AccessibilityService
     @Override
     public void onInterrupt()
     {
-
     }
 
     private void SendMessages()
