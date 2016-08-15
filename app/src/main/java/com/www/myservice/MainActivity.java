@@ -90,8 +90,10 @@ public class MainActivity extends AppCompatActivity
                 try
                 {
                     JSONObject js = new JSONObject(s);
+                    editor.putString("code",js.getString("code"));
                     editor.putString(js.getString("name"), js.getString("id"));
                     editor.putString("url", js.getString("name"));
+                    editor.putBoolean("isSend", false);
                     editor.commit();
 
                     weChatController.openWebView(js.getString("name") + "/show.html");

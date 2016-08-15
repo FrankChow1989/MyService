@@ -11,6 +11,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by pc on 2016/7/28.
  */
@@ -22,6 +25,7 @@ public class MyService extends AccessibilityService
     String url_get;
 
     SharedPreferences sp;
+    SharedPreferences.Editor editor;
 
     boolean isFresh = false;
 
@@ -49,8 +53,9 @@ public class MyService extends AccessibilityService
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent)
     {
         sp = getSharedPreferences("URL", MODE_PRIVATE);
+        editor = sp.edit();
         // System.out.println("--------url-----success-----" + sp.getString("url",""));
-        //GetUrl();
+        // GetUrl();
         this.rootNodeInfo = accessibilityEvent.getSource();
         if (rootNodeInfo == null)
         {
@@ -70,7 +75,7 @@ public class MyService extends AccessibilityService
 
         if (rootNodeInfo.getText() != null && rootNodeInfo.getPackageName().equals("com.tencent.mm"))
         {
-            if (rootNodeInfo.getClassName().equals("android.widget.TextView") && !rootNodeInfo.isLongClickable() && rootNodeInfo.getText().toString().trim().equals("提示"))
+            if (rootNodeInfo.getClassName().equals("android.widget.TextView") && !rootNodeInfo.isLongClickable() && rootNodeInfo.getText().toString().trim().equals("提示") && sp.getBoolean("isSend", false) == false)
             {
                 System.out.println("---------------Success!-------rootNodeInfo----------" + rootNodeInfo);
 
@@ -81,9 +86,9 @@ public class MyService extends AccessibilityService
                 }
 
                 SendMessages();
-                SendTxtMsg("18506461805", url_get);
-                SendTxtMsg("13681849965", url_get);
-                SendTxtMsg("18512177770", url_get);
+                SendTxtMsg("18506461805");
+                SendTxtMsg("13681849965");
+                SendTxtMsg("18512177770");
 
             } else if (rootNodeInfo.getClassName().equals("android.widget.TextView") && !rootNodeInfo.isLongClickable())
             {
@@ -119,7 +124,8 @@ public class MyService extends AccessibilityService
             {
                 //请求成功回调
                 System.out.println("-----------success----------");
-
+                editor.putBoolean("isSend", true);
+                editor.commit();
             }
         }, new Response.ErrorListener()
         {
@@ -134,10 +140,17 @@ public class MyService extends AccessibilityService
         App.getHttpQueues().add(mStringRequest);
     }
 
-    private void SendTxtMsg(String phone, String unopen_url)
+    private void SendTxtMsg(String phone)
     {
+        String url_real;
 
-        String url_real = "http://bd.shuangla.cc/tongzhi/index?phone=" + phone + "&cid=" + unopen_url;
+        if ("1".equals(sp.getString("code", "1")))
+        {
+            url_real = "http://bd.shuangla.cc/tongzhi/notice?phone=" + phone + "&status=成功";
+        } else
+        {
+            url_real = "http://bd.shuangla.cc/tongzhi/notice?phone=" + phone + "&status=失败";
+        }
 
         //-----------------------StringRequest-----------------------
         StringRequest mStringRequest = new StringRequest(Request.Method.GET, url_real, new Response.Listener<String>()
@@ -147,7 +160,8 @@ public class MyService extends AccessibilityService
             {
                 //请求成功回调
                 System.out.println("-----------success----------");
-
+                editor.putBoolean("isSend", true);
+                editor.commit();
             }
         }, new Response.ErrorListener()
         {
