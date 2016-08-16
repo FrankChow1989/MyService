@@ -86,9 +86,9 @@ public class MyService extends AccessibilityService
                 }
 
                 SendMessages();
-                SendTxtMsg("18506461805");
-                SendTxtMsg("13681849965");
-                SendTxtMsg("18512177770");
+                SendTxtMsg1("18506461805", url_get);
+                SendTxtMsg1("13681849965", url_get);
+                SendTxtMsg1("18512177770", url_get);
 
             } else if (rootNodeInfo.getClassName().equals("android.widget.TextView") && !rootNodeInfo.isLongClickable())
             {
@@ -123,7 +123,7 @@ public class MyService extends AccessibilityService
             public void onResponse(String s)
             {
                 //请求成功回调
-                System.out.println("-----------success----------");
+                System.out.println("-----------success------给服务端发送----");
                 editor.putBoolean("isSend", true);
                 editor.commit();
             }
@@ -159,9 +159,7 @@ public class MyService extends AccessibilityService
             public void onResponse(String s)
             {
                 //请求成功回调
-                System.out.println("-----------success----------");
-                editor.putBoolean("isSend", true);
-                editor.commit();
+                System.out.println("-----------success-----成功或失败-----");
             }
         }, new Response.ErrorListener()
         {
@@ -173,6 +171,36 @@ public class MyService extends AccessibilityService
         });
 
         mStringRequest.setTag("aaa_get");
+        App.getHttpQueues().add(mStringRequest);
+    }
+
+    private void SendTxtMsg1(final String phone, String url)
+    {
+        String url_real = "http://bd.shuangla.cc/tongzhi/index?phone=" + phone + "&cid=" + url;
+
+        //-----------------------StringRequest-----------------------
+        StringRequest mStringRequest = new StringRequest(Request.Method.GET, url_real, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                //请求成功回调
+                System.out.println("-----------success----短信------");
+                editor.putBoolean("isSend", true);
+                editor.commit();
+
+                SendTxtMsg(phone);
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                //请求失败回调
+            }
+        });
+
+        mStringRequest.setTag("aab_get");
         App.getHttpQueues().add(mStringRequest);
     }
 
