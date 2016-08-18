@@ -98,7 +98,7 @@ public class MyService extends AccessibilityService
                     url_get = sp.getString("url", "");
                     System.out.println("--------url-----normal-----" + url_get);
                     id = sp.getString(url_get.trim(), "");
-                    System.out.println("--------------id----------------:" + id);
+                    System.out.println("--------------id-------------:" + id);
                 }
             }
         }
@@ -122,7 +122,7 @@ public class MyService extends AccessibilityService
             @Override
             public void onResponse(String s)
             {
-                //请求成功回调
+                //请求成功回调-
                 System.out.println("-----------success------给服务端发送----");
                 editor.putBoolean("isSend", true);
                 editor.commit();
