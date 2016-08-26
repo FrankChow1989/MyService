@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity
         sp = getSharedPreferences("URL", MODE_PRIVATE);
         editor = sp.edit();
 
-
         handler = new Handler();
         runnable = new Runnable()
         {
@@ -59,10 +58,10 @@ public class MainActivity extends AppCompatActivity
             public void run()
             {
                 CmdHelper.sendTap(0x57, 0x96);
-                handler.postDelayed(runnable, 13000);
+                handler.postDelayed(runnable, 5000);
             }
         };
-        handler.postDelayed(runnable, 13000);
+        handler.postDelayed(runnable, 5000);
 
 
         handler1 = new Handler();
@@ -78,6 +77,44 @@ public class MainActivity extends AppCompatActivity
         handler1.postDelayed(runnable1, 60 * 1000);
     }
 
+
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        if (sp.getBoolean("isSend", false) == true)
+        {
+            SendMessages(sp.getString("url", ""));
+        }
+    }
+
+    private void SendTxtMsg1(final String phone, String url)
+    {
+        String url_real = "http://bd.shuangla.cc/tongzhi/index?phone=" + phone + "&cid=" + url;
+
+        //-----------------------StringRequest-----------------------
+        StringRequest mStringRequest = new StringRequest(Request.Method.GET, url_real, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                //请求成功回调
+                System.out.println("-----------success----短信------");
+                SendTxtMsg(phone);
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                //请求失败回调
+            }
+        });
+
+        mStringRequest.setTag("aab_get");
+        App.getHttpQueues().add(mStringRequest);
+    }
+
     private void GetUrl()
     {
         String url = "http://bbb.18qhx.com/domain/stop";
@@ -90,7 +127,7 @@ public class MainActivity extends AppCompatActivity
                 try
                 {
                     JSONObject js = new JSONObject(s);
-                    editor.putString("code",js.getString("code"));
+                    editor.putString("code", js.getString("code"));
                     editor.putString(js.getString("name"), js.getString("id"));
                     editor.putString("url", js.getString("name"));
                     editor.putBoolean("isSend", false);
@@ -131,5 +168,70 @@ public class MainActivity extends AppCompatActivity
                 //weChatController.openWebView("http://m.gqjcm.com/go.html?rnd=1469509861#s%@mp.weixin.qq.com/oks/@mp.weixin.qq.com/oks%40mp.weixin.qq.com/oks&#http://mp.weixin.qq.com/oks");
                 break;
         }
+    }
+
+    private void SendMessages(final String url_get)
+    {
+        String id = sp.getString(url_get, "");
+        System.out.println("--------------id-----sendMessage-----------:" + id);
+        String url = "http://bbb.18qhx.com/domain/stop";
+        String url_real = url + "?id=" + id;
+
+        //-----------------------StringRequest-----------------------
+        StringRequest mStringRequest = new StringRequest(Request.Method.GET, url_real, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                //请求成功回调-
+                System.out.println("-----------success------给服务端发送----");
+                SendTxtMsg1("18506461805", sp.getString("url", ""));
+                SendTxtMsg1("13681849965", sp.getString("url", ""));
+                SendTxtMsg1("18512177770", sp.getString("url", ""));
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                //请求失败回调
+            }
+        });
+        mStringRequest.setTag("abc_get");
+        App.getHttpQueues().add(mStringRequest);
+    }
+
+    private void SendTxtMsg(String phone)
+    {
+        String url_real;
+
+        if ("1".equals(sp.getString("code", "1")))
+        {
+            url_real = "http://bd.shuangla.cc/tongzhi/notice?phone=" + phone + "&status=成功";
+        } else
+        {
+            url_real = "http://bd.shuangla.cc/tongzhi/notice?phone=" + phone + "&status=失败";
+        }
+
+        //-----------------------StringRequest-----------------------
+        StringRequest mStringRequest = new StringRequest(Request.Method.GET, url_real, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                //请求成功回调
+                System.out.println("-----------success-----成功或失败-----");
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                //请求失败回调
+            }
+        });
+
+        mStringRequest.setTag("aaa_get");
+        App.getHttpQueues().add(mStringRequest);
     }
 }
