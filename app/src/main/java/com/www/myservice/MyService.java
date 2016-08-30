@@ -94,7 +94,6 @@ public class MyService extends AccessibilityService
                     System.out.println("--------url-----normal-----" + url_get);
                     id = sp.getString(url_get.trim(), "");
                     System.out.println("--------------id-------------:" + id);
-
                     editor.putBoolean("isSend", false);
                     editor.commit();
 

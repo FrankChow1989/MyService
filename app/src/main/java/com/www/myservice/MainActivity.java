@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity
     Button idStart;
     @InjectView(R.id.id_start_check)
     Button idStartCheck;
-    List<URL> mList;
 
     WeChatController weChatController;
 
@@ -164,8 +163,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.id_start_check:
                 GetUrl();
-                //weChatController.openWebView();
-                //weChatController.openWebView("http://m.gqjcm.com/go.html?rnd=1469509861#s%@mp.weixin.qq.com/oks/@mp.weixin.qq.com/oks%40mp.weixin.qq.com/oks&#http://mp.weixin.qq.com/oks");
                 break;
         }
     }
