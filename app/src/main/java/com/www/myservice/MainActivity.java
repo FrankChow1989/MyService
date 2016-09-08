@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity
 
         sp = getSharedPreferences("URL", MODE_PRIVATE);
         editor = sp.edit();
+        editor.putBoolean("isSend", false);
+        editor.commit();
 
         handler = new Handler();
         runnable = new Runnable()
@@ -61,7 +63,6 @@ public class MainActivity extends AppCompatActivity
             }
         };
         handler.postDelayed(runnable, 5000);
-
 
         handler1 = new Handler();
         runnable1 = new Runnable()
