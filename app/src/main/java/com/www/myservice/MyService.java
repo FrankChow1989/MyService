@@ -53,7 +53,7 @@ public class MyService extends AccessibilityService
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent)
     {
-        sp = getSharedPreferences("URL", MODE_PRIVATE);
+        sp = getSharedPreferences("URLs", MODE_PRIVATE);
         editor = sp.edit();
 
         this.rootNodeInfo = accessibilityEvent.getSource();
@@ -96,7 +96,6 @@ public class MyService extends AccessibilityService
                     System.out.println("--------------id-------------:" + id);
                     editor.putBoolean("isSend", false);
                     editor.commit();
-
                 }
             }
         }

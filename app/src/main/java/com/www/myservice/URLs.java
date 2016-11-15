@@ -3,7 +3,7 @@ package com.www.myservice;
 /**
  * Created by pc on 2016/7/29.
  */
-public class URL
+public class URLs
 {
     private String name;
     private String id;
