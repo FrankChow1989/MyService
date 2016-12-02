@@ -156,9 +156,7 @@ public class MainActivity extends AppCompatActivity
 
     private void GetUrl()
     {
-
         new MyThread().start();
-
     }
 
     @OnClick({R.id.id_start, R.id.id_start_check})
@@ -211,10 +209,8 @@ public class MainActivity extends AppCompatActivity
             {
                 //请求成功回调-
                 System.out.println("-----------success------给服务端发送----");
+                SendTxtMsg1("18512177770", sp.getString("url", ""));
 
-//                SendTxtMsg1("18506461805", sp.getString("url", ""));
-//                SendTxtMsg1("13681849965", sp.getString("url", ""));
-//                SendTxtMsg1("18512177770", sp.getString("url", ""));
             }
         }, new Response.ErrorListener()
         {
