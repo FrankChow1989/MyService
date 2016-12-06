@@ -34,12 +34,6 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity
 {
-
-    @InjectView(R.id.id_start)
-    Button idStart;
-    @InjectView(R.id.id_start_check)
-    Button idStartCheck;
-
     WeChatController weChatController;
 
     SharedPreferences sp;
@@ -187,7 +181,6 @@ public class MainActivity extends AppCompatActivity
 //                    editor.putString("main_web", new_web);
 //                    editor.commit();
 //                    Toast.makeText(this, "保存成功！", Toast.LENGTH_SHORT).show();
-//
 //                    idEdittext.setText("");
 //                }
 //                break;
