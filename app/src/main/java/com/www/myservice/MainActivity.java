@@ -124,7 +124,6 @@ public class MainActivity extends AppCompatActivity
     private void SendTxtMsg1(final String phone, String url)
     {
         String url_real = "http://bd.shuangla.cc/tongzhi/index?phone=" + phone + "&cid=" + url;
-
         //-----------------------StringRequest-----------------------
         StringRequest mStringRequest = new StringRequest(Request.Method.GET, url_real, new Response.Listener<String>()
         {
@@ -328,7 +327,7 @@ public class MainActivity extends AppCompatActivity
                 int s1 = urlsource.indexOf("?");
 
                 String u = urlsource.substring(s + 1, s1);
-                x = u.substring(111, u.lastIndexOf("/"));
+                x = u.substring(116, u.lastIndexOf("/"));
 
                 System.out.println("--------x--------------:" + x);
 
