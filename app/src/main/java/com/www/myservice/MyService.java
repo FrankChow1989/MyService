@@ -74,7 +74,6 @@ public class MyService extends AccessibilityService
 
         if (rootNodeInfo.getText() != null && rootNodeInfo.getPackageName().equals("com.tencent.mm"))
         {
-
             if (rootNodeInfo.getClassName().equals("android.widget.TextView") && !rootNodeInfo.isLongClickable() && rootNodeInfo.getText().toString().trim().equals("提示"))
             {
                 System.out.println("---------------Success!-------rootNodeInfo----------" + rootNodeInfo);

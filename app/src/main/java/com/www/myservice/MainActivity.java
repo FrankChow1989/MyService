@@ -47,7 +47,13 @@ public class MainActivity extends AppCompatActivity
 //    @InjectView(R.id.id_edittext)
 //    EditText idEdittext;
 
+
+
+
     String x = null;
+
+    private String url = "http://www.uku99.net/domain/stop";
+    private String htmlurl = "http://res.sijiys.com/pub/wap/161031_h5_hb.html";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -123,7 +129,7 @@ public class MainActivity extends AppCompatActivity
 
     private void SendTxtMsg1(final String phone, String url)
     {
-        String url_real = "http://bd.shuangla.cc/tongzhi/index?phone=" + phone + "&cid=" + url;
+        String url_real = "http://tz.uku99.net/tongzhi/index?phone=" + phone + "&cid=" + url;
         //-----------------------StringRequest-----------------------
         StringRequest mStringRequest = new StringRequest(Request.Method.GET, url_real, new Response.Listener<String>()
         {
@@ -149,7 +155,8 @@ public class MainActivity extends AppCompatActivity
 
     private void GetUrl()
     {
-        new MyThread().start();
+        //new MyThread().start();
+        getUrls();
     }
 
     @OnClick({R.id.id_start, R.id.id_start_check})
@@ -190,7 +197,6 @@ public class MainActivity extends AppCompatActivity
     {
         String id = sp.getString(url_get, "");
         System.out.println("--------------id-----sendMessage-----------:" + id);
-        String url = "http://www.uku99.net/domain/stop";
         String url_real = url + "?id=" + id;
 
         //-----------------------StringRequest-----------------------
@@ -222,10 +228,10 @@ public class MainActivity extends AppCompatActivity
 
         if ("1".equals(sp.getString("code", "1")))
         {
-            url_real = "http://bd.shuangla.cc/tongzhi/notice?phone=" + phone + "&status=成功";
+            url_real = "http://tz.uku99.net/tongzhi/notice?phone=" + phone + "&status=成功";
         } else
         {
-            url_real = "http://bd.shuangla.cc/tongzhi/notice?phone=" + phone + "&status=失败";
+            url_real = "http://tz.uku99.net/tongzhi/notice?phone=" + phone + "&status=失败";
         }
 
         //-----------------------StringRequest-----------------------
@@ -302,7 +308,7 @@ public class MainActivity extends AppCompatActivity
             //你要实现的代码
             try
             {
-                String urlsource = getHtml("http://res.sijiys.com/pub/wap/161031_h5_hb.html");
+                String urlsource = getHtml(htmlurl);
 
 //                Pattern pattern = Pattern
 //                        .compile("<a[^>]*href=(\\\"http([^\\\"]*))\\\">(.*?)</a>");
@@ -322,62 +328,15 @@ public class MainActivity extends AppCompatActivity
 //                    System.out.println(s);
 //                }
 
-
                 int s = urlsource.indexOf("'");
                 int s1 = urlsource.indexOf("?");
 
                 String u = urlsource.substring(s + 1, s1);
-                x = u.substring(116, u.lastIndexOf("/"));
+                x = u.substring(111, u.lastIndexOf("/"));
 
                 System.out.println("--------x--------------:" + x);
 
-                String url = "http://www.uku99.net/domain/stop";
-                //-----------------------StringRequest-----------------------
-                StringRequest mStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>()
-                {
-                    @Override
-                    public void onResponse(String s)
-                    {
-                        try
-                        {
-                            JSONObject js = new JSONObject(s);
-                            editor.putString("code", js.getString("code"));
-                            editor.putString(js.getString("name"), js.getString("id"));
-                            editor.putString("url", js.getString("name"));
-                            editor.putBoolean("isSend", false);
-                            // editor.putBoolean("sendTxt", false);
-                            editor.commit();
-
-                            System.out.println("---------------" + js.getString("name"));
-
-                            if (x.equals(js.getString("name")))
-                            {
-                                weChatController.openWebView(js.getString("name") + "/show2.html?" + Math.random());
-                            } else if (js.getString("id").equals("0") || !x.equals(js.getString("name")))
-                            {
-                                System.out.println("---------sendTxt------------");
-
-                                SendTxtMsg1("18506461805", sp.getString("url", ""));
-                                SendTxtMsg1("18325611110", sp.getString("url", ""));
-                                SendTxtMsg1("13681849965", sp.getString("url", ""));
-                            }
-
-                        } catch (JSONException e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError)
-                    {
-                        //请求失败回调
-                        System.out.println(volleyError);
-                    }
-                });
-                mStringRequest.setTag("abc_get");
-                App.getHttpQueues().add(mStringRequest);
+                getUrls();
 
             } catch (Exception e)
             {
@@ -385,5 +344,58 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
+    public void getUrls()
+    {
+        //-----------------------StringRequest-----------------------
+        StringRequest mStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                try
+                {
+                    JSONObject js = new JSONObject(s);
+                    editor.putString("code", js.getString("code"));
+                    editor.putString(js.getString("name"), js.getString("id"));
+                    editor.putString("url", js.getString("name"));
+                    editor.putBoolean("isSend", false);
+                    // editor.putBoolean("sendTxt", false);
+                    editor.commit();
+
+                    System.out.println("---------------" + js.getString("name"));
+
+//                    if (x.equals(js.getString("name")))
+//                    {
+//                        weChatController.openWebView(js.getString("name") + "/show2.html?" + Math.random());
+//                    } else if (js.getString("id").equals("0") || !x.equals(js.getString("name")))
+//                    {
+//                        System.out.println("---------sendTxt------------");
+//
+//                        SendTxtMsg1("18506461805", sp.getString("url", ""));
+//                        SendTxtMsg1("18325611110", sp.getString("url", ""));
+//                        SendTxtMsg1("13681849965", sp.getString("ur l", ""));
+//                    }
+
+                    weChatController.openWebView(js.getString("name") + "/show2.html?" + Math.random());
+
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                //请求失败回调
+                System.out.println(volleyError);
+            }
+        });
+        mStringRequest.setTag("abc_get");
+        App.getHttpQueues().add(mStringRequest);
+    }
+
 }
 
