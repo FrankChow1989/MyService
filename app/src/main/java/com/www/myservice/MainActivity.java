@@ -34,6 +34,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity
 {
+    //打开微信浏览器的类
     WeChatController weChatController;
 
     SharedPreferences sp;
@@ -47,12 +48,14 @@ public class MainActivity extends AppCompatActivity
 //    @InjectView(R.id.id_edittext)
 //    EditText idEdittext;
 
-
-
+    private long opentime = 63000;
+    private long closetime = 120;
 
     String x = null;
 
+    //获取网页链接的url
     private String url = "http://www.uku99.net/domain/stop";
+    //正则匹配的html
     private String htmlurl = "http://res.sijiys.com/pub/wap/161031_h5_hb.html";
 
     @Override
@@ -67,19 +70,21 @@ public class MainActivity extends AppCompatActivity
         editor.putBoolean("isSend", false);
         editor.commit();
 
+        //每一分钟打开一次
         handler = new Handler();
         runnable = new Runnable()
         {
             @Override
             public void run()
             {
-                CmdHelper.sendTap(0x57, 0x96);
-                handler.postDelayed(runnable, 63000);
+                CmdHelper.sendTap(0x40, 0x60);
+                handler.postDelayed(runnable, opentime);
                 System.out.println("---------关闭---------");
             }
         };
-        handler.postDelayed(runnable, 63000);
+        handler.postDelayed(runnable, opentime);
 
+        //每120秒点击关闭
         handler1 = new Handler();
         runnable1 = new Runnable()
         {
@@ -93,10 +98,10 @@ public class MainActivity extends AppCompatActivity
                 {
                     e.printStackTrace();
                 }
-                handler1.postDelayed(runnable1, 120 * 1000);
+                handler1.postDelayed(runnable1, closetime * 1000);
             }
         };
-        handler1.postDelayed(runnable1, 120 * 1000);
+        handler1.postDelayed(runnable1, closetime * 1000);
 
 //        handler2 = new Handler();
 //        runnable2 = new Runnable()
@@ -127,6 +132,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //发短信方法
     private void SendTxtMsg1(final String phone, String url)
     {
         String url_real = "http://tz.uku99.net/tongzhi/index?phone=" + phone + "&cid=" + url;
@@ -153,6 +159,7 @@ public class MainActivity extends AppCompatActivity
         App.getHttpQueues().add(mStringRequest);
     }
 
+    //获取链接的方法
     private void GetUrl()
     {
         //new MyThread().start();
@@ -193,6 +200,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //切换请求方法
     private void SendMessages(final String url_get)
     {
         String id = sp.getString(url_get, "");
@@ -222,6 +230,7 @@ public class MainActivity extends AppCompatActivity
         App.getHttpQueues().add(mStringRequest);
     }
 
+    //短信发送失败、成功
     private void SendTxtMsg(String phone)
     {
         String url_real;
@@ -301,6 +310,7 @@ public class MainActivity extends AppCompatActivity
         return outStream.toByteArray();
     }
 
+    //开启一个新的线程进行正则匹配
     class MyThread extends Thread
     {
         public void run()
